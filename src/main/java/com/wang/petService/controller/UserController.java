@@ -1,6 +1,7 @@
 package com.wang.petService.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wang.petService.pojo.User;
 import com.wang.petService.service.IUsersService;
 import com.wang.petService.utils.Result;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "*") // 允许所有来源的跨域请求
 @Api(tags = "User", description = "Operations related to users")
 public class UserController {
 
@@ -32,10 +34,13 @@ public class UserController {
     private IUsersService iUsersService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return iUsersService.list();
+    @ApiOperation(value = "Get users with pagination", notes = "Retrieve users with pagination support")
+    public Result<Page<User>> getUsersWithPagination(@RequestParam(defaultValue = "1") int page,
+                                                     @RequestParam(defaultValue = "10") int size) {
+        Page<User> userPage = new Page<>(page, size);
+        Page<User> paginatedUsers = iUsersService.page(userPage);
+        return Result.success(paginatedUsers);
     }
-
     @GetMapping("/{id}")
     @ApiOperation(value = "Get user by ID", notes = "Retrieve a user by their ID")
     public Result<User> getUserById(@PathVariable Long id) {

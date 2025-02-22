@@ -1,9 +1,14 @@
 package com.wang.petService.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.wang.petService.pojo.Review;
+import com.wang.petService.service.IReviewsService;
+import com.wang.petService.utils.Result;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -14,7 +19,54 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2025-02-03
  */
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/review")
+@CrossOrigin(origins = "*") // 允许所有来源的跨域请求
 public class ReviewsController {
+    @Autowired
+    private IReviewsService iReviewsService;
 
+    @GetMapping
+    public List<Review> getAllReviews() {
+        return iReviewsService.list();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "Get review by ID", notes = "Retrieve a review by its ID")
+    public Result<Review> getReviewById(@PathVariable Long id) {
+        Review review = iReviewsService.getById(id);
+        return Result.success(review);
+    }
+
+    @PostMapping
+    @ApiOperation(value = "Create a new review", notes = "Create a new review")
+    public Result<String> createReview(@RequestBody Review review) {
+        boolean save = iReviewsService.save(review);
+        if (save) {
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation(value = "Update review", notes = "Update an existing review by its ID")
+    public Result<String> updateReview(@RequestBody Review review) {
+        boolean b = iReviewsService.updateById(review);
+        if (b) {
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete review", notes = "Delete an existing review by its ID")
+    public Result<String> deleteReview(@PathVariable Long id) {
+        boolean b = iReviewsService.removeById(id);
+        if (b) {
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
 }

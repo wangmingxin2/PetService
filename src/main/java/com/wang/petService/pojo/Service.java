@@ -39,6 +39,7 @@ public class Service implements Serializable {
 
     private Integer duration;
 
+    private String status;
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;

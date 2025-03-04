@@ -1,9 +1,9 @@
 package com.wang.petService.pojo;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -40,13 +40,14 @@ public class Service implements Serializable {
     private Integer duration;
 
     private String status;
+
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
-
+    @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updatedTime;
-
+    @TableField(fill = FieldFill.INSERT)
     private String createdBy;
-
+    @TableField(fill = FieldFill.UPDATE)
     private String updatedBy;
-
 
 }

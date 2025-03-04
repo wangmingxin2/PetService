@@ -2,6 +2,7 @@ package com.wang.petService.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wang.petService.pojo.Pet;
 import com.wang.petService.pojo.User;
 import com.wang.petService.service.IUsersService;
 import com.wang.petService.utils.Result;
@@ -36,9 +37,10 @@ public class UserController {
     @GetMapping
     @ApiOperation(value = "Get users with pagination", notes = "Retrieve users with pagination support")
     public Result<Page<User>> getUsersWithPagination(@RequestParam(defaultValue = "1") int page,
-                                                     @RequestParam(defaultValue = "10") int size) {
-        Page<User> userPage = new Page<>(page, size);
-        Page<User> paginatedUsers = iUsersService.page(userPage);
+                                                     @RequestParam(defaultValue = "10") int size,
+                                                     @RequestParam(required = false) String name,
+                                                     @RequestParam(required = false) String phone) {
+        Page<User> paginatedUsers = iUsersService.selectLimit(page, size, name, phone);;
         return Result.success(paginatedUsers);
     }
     @GetMapping("/{id}")

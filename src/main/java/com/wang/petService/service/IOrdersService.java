@@ -1,5 +1,6 @@
 package com.wang.petService.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wang.petService.pojo.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOrdersService extends IService<Order> {
 
+    Page<Order> selectLimit(Integer page, Integer pageSize, String userId, String status);
 }

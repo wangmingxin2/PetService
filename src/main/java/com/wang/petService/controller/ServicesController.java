@@ -31,9 +31,10 @@ public class ServicesController {
     @GetMapping
     @ApiOperation(value = "Get all services with pagination", notes = "Retrieve all services with pagination support")
     public Result<Page<Service>> getAllServices(@RequestParam(defaultValue = "1") int page,
-                                                @RequestParam(defaultValue = "10") int size) {
-        Page<Service> servicePage = new Page<>(page, size);
-        Page<Service> servicesPage = iServicesService.page(servicePage);
+                                                @RequestParam(defaultValue = "10") int size,
+                                                @RequestParam(required = false) String name,
+                                                @RequestParam(required = false) String status) {
+        Page<Service> servicesPage = iServicesService.selectLimit(page, size, name, status);;
         return Result.success(servicesPage);
     }
 

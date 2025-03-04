@@ -1,6 +1,8 @@
 package com.wang.petService.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wang.petService.pojo.Pet;
 import com.wang.petService.pojo.Review;
 import com.wang.petService.service.IReviewsService;
 import com.wang.petService.utils.Result;
@@ -26,8 +28,12 @@ public class ReviewsController {
     private IReviewsService iReviewsService;
 
     @GetMapping
-    public List<Review> getAllReviews() {
-        return iReviewsService.list();
+    public Result<Page<Review>> getAllReviews(@RequestParam(defaultValue = "1") Integer page,
+                                      @RequestParam(defaultValue = "10") Integer pageSize,
+                                      @RequestParam(required = false) String orderId,
+                                      @RequestParam(required = false) String userId) {
+        Page<Review> pages = iReviewsService.selectLimit(page, pageSize, orderId, userId);
+        return Result.success(pages);
     }
 
     @GetMapping("/{id}")

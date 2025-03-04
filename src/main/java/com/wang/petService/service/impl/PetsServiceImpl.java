@@ -35,7 +35,7 @@ public class PetsServiceImpl extends ServiceImpl<PetsMapper, Pet> implements IPe
             queryWrapper.eq(Pet::getType, type);
         }
 
-        IPage<Pet> iPage = new Page<>(page, pageSize);
-        return (Page<Pet>) petsMapper.selectPage(iPage, queryWrapper);
+        IPage<Pet> Page = new Page<>(page, pageSize);
+        return (Page<Pet>) petsMapper.selectPage(Page, queryWrapper);
     }
 }

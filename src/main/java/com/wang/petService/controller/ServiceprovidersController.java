@@ -1,6 +1,8 @@
 package com.wang.petService.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wang.petService.pojo.Service;
 import com.wang.petService.pojo.Serviceprovider;
 import com.wang.petService.service.IServiceprovidersService;
 import com.wang.petService.utils.Result;
@@ -26,8 +28,12 @@ public class ServiceprovidersController {
     private IServiceprovidersService iServiceprovidersService;
 
     @GetMapping
-    public List<Serviceprovider> getAllServiceproviders() {
-        return iServiceprovidersService.list();
+    public Result<Page<Serviceprovider>> getAllServiceproviders(@RequestParam(defaultValue = "1") int page,
+                                                                @RequestParam(defaultValue = "10") int size,
+                                                                @RequestParam(required = false) String name,
+                                                                @RequestParam(required = false) String phone) {
+        Page<Serviceprovider> serviceproviderPage = iServiceprovidersService.selectLimit(page, size, name, phone);;
+        return Result.success(serviceproviderPage);
     }
 
     @GetMapping("/{id}")

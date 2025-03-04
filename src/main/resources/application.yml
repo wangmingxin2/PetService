@@ -1,6 +1,10 @@
 server:
   port: 8080   #  配置启动端口号
-
+minio:
+  endpoint: http://60.204.157.137:9000
+  accessKey: ruoyi
+  secretKey: ruoyi123
+  bucketName: pet
 mybatis:
   config-location: classpath:mybatis.cfg.xml    #  mybatis主配置文件所在路径
   type-aliases-package: com.wang.petService.pojo  #  定义所有操作类的别名所在包

@@ -37,7 +37,7 @@ public class Order implements Serializable {
 
     private Integer serviceProviderId;
 
-    private String orderAmount ;
+    private Integer orderAmount ;
 
     private String orderStatus;
 

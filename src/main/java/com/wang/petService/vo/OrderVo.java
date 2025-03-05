@@ -31,7 +31,7 @@ public class OrderVo implements Serializable {
 
     private String serviceProviderName;
 
-    private String orderAmount ;
+    private Integer orderAmount ;
 
     private String orderStatus;
 

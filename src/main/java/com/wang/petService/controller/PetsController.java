@@ -37,8 +37,12 @@ public class PetsController {
         return Result.success(pages);
     }
 
+    @GetMapping("/list")
+    public Result<List<Pet>> getAllPets() {
+        List<Pet> pets = iPetsService.list();
+        return Result.success(pets);
+    }
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get pet by ID", notes = "Retrieve a pet by its ID")
     public Result<Pet> getPetById(@PathVariable Long id) {
         Pet pet = iPetsService.getById(id);
         return Result.success(pet);

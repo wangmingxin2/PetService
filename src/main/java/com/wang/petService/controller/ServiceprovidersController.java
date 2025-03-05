@@ -36,8 +36,12 @@ public class ServiceprovidersController {
         return Result.success(serviceproviderPage);
     }
 
+    @GetMapping("/list")
+    public Result<List<Serviceprovider>> listServiceprovider() {
+        List<Serviceprovider> serviceprovider = iServiceprovidersService.list();
+        return Result.success(serviceprovider);
+    }
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get service provider by ID", notes = "Retrieve a service provider by its ID")
     public Result<Serviceprovider> getServiceproviderById(@PathVariable Long id) {
         Serviceprovider serviceprovider = iServiceprovidersService.getById(id);
         return Result.success(serviceprovider);

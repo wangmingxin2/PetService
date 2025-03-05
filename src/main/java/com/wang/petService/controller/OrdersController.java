@@ -54,13 +54,90 @@ public class OrdersController {
             return Result.success(emptyPage);
         }
 
+        // 使用提取的方法进行数据转换
+        List<OrderVo> voList = convertToOrderVoList(pages.getRecords());
+
+        // 创建并返回分页VO对象
+        Page<OrderVo> voPage = new Page<>(page, pageSize);
+        voPage.setTotal(pages.getTotal());
+        voPage.setRecords(voList);
+
+        return Result.success(voPage);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation(value = "Get all orders", notes = "Retrieve all orders transformed to OrderVo objects")
+    public Result<List<OrderVo>> listAllOrders() {
+        // 获取所有订单数据
+        List<Order> orderList = iOrdersService.list();
+
+        // 使用提取的方法进行数据转换
+        List<OrderVo> voList = convertToOrderVoList(orderList);
+
+        return Result.success(voList);
+    }
+    @GetMapping("/{id}")
+    public Result<Order> getOrderById(@PathVariable Long id) {
+        Order order = iOrdersService.getById(id);
+        return Result.success(order);
+    }
+
+    @GetMapping("/totalAmount")
+    @ApiOperation(value = "Get total order amount", notes = "Retrieve the sum of all order amounts")
+    public Result<Integer> getTotalOrderAmount() {
+        List<Order> orderList = iOrdersService.list();
+        Integer sum = orderList.stream().collect(Collectors.summingInt(Order::getOrderAmount));
+        return Result.success(sum);
+    }
+    @PostMapping
+    public Result<String> createOrder(@RequestBody Order order) {
+        boolean save = iOrdersService.save(order);
+        if (save) {
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public Result<String> updateOrder(@RequestBody Order order) {
+        boolean b = iOrdersService.updateById(order);
+        if (b) {
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete order", notes = "Delete an existing order by its ID")
+    public Result<String> deleteOrder(@PathVariable Long id) {
+        boolean b = iOrdersService.removeById(id);
+        if (b) {
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
+
+
+    /**
+     * 将Order列表转换为OrderVo列表
+     * @param orderList 订单列表
+     * @return OrderVo列表
+     */
+    private List<OrderVo> convertToOrderVoList(List<Order> orderList) {
+        if (CollectionUtils.isEmpty(orderList)) {
+            return new ArrayList<>();
+        }
+
         // 收集所有关联ID，避免重复查询
         Set<Integer> userIds = new HashSet<>();
         Set<Integer> serviceIds = new HashSet<>();
         Set<Integer> petIds = new HashSet<>();
         Set<Integer> providerIds = new HashSet<>();
 
-        for (Order order : pages.getRecords()) {
+        for (Order order : orderList) {
             if (order.getUserId() != null) userIds.add(order.getUserId());
             if (order.getServiceId() != null) serviceIds.add(order.getServiceId());
             if (order.getPetId() != null) petIds.add(order.getPetId());
@@ -85,7 +162,7 @@ public class OrdersController {
                 new HashMap<>();
 
         // 转换为VO对象
-        List<OrderVo> voList = pages.getRecords().stream().map(order -> {
+        return orderList.stream().map(order -> {
             OrderVo orderVo = new OrderVo();
             BeanUtils.copyProperties(order, orderVo);
 
@@ -100,60 +177,12 @@ public class OrdersController {
             orderVo.setPetName(pet != null ? pet.getName() : "未知宠物");
             orderVo.setServiceProviderName(serviceprovider != null ? serviceprovider.getName() : "未知服务商");
 
-
             // 格式化订单金额
             if (order.getOrderAmount() != null) {
-                orderVo.setOrderAmount("¥" + order.getOrderAmount().toString());
+                orderVo.setOrderAmount(order.getOrderAmount());
             }
 
             return orderVo;
         }).collect(Collectors.toList());
-
-        // 创建并返回分页VO对象
-        Page<OrderVo> voPage = new Page<>(page, pageSize);
-        voPage.setTotal(pages.getTotal());
-        voPage.setRecords(voList);
-
-        return Result.success(voPage);
-    }
-
-    @GetMapping("/{id}")
-    @ApiOperation(value = "Get order by ID", notes = "Retrieve an order by its ID")
-    public Result<Order> getOrderById(@PathVariable Long id) {
-        Order order = iOrdersService.getById(id);
-        return Result.success(order);
-    }
-
-    @PostMapping
-    @ApiOperation(value = "Create a new order", notes = "Create a new order")
-    public Result<String> createOrder(@RequestBody Order order) {
-        boolean save = iOrdersService.save(order);
-        if (save) {
-            return Result.success();
-        } else {
-            return Result.error();
-        }
-    }
-
-    @PutMapping("/{id}")
-    @ApiOperation(value = "Update order", notes = "Update an existing order by its ID")
-    public Result<String> updateOrder(@RequestBody Order order) {
-        boolean b = iOrdersService.updateById(order);
-        if (b) {
-            return Result.success();
-        } else {
-            return Result.error();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete order", notes = "Delete an existing order by its ID")
-    public Result<String> deleteOrder(@PathVariable Long id) {
-        boolean b = iOrdersService.removeById(id);
-        if (b) {
-            return Result.success();
-        } else {
-            return Result.error();
-        }
     }
 }

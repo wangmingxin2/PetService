@@ -1,13 +1,20 @@
 package com.wang.petService.interceptor;
 
 
+import com.wang.petService.pojo.Admin;
 import com.wang.petService.utils.AdminContext;
 import com.wang.petService.utils.JwtUtil;
+import com.wang.petService.utils.RedisUtil;
+import io.jsonwebtoken.Claims;
+import jakarta.annotation.Resource;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author wmx
@@ -19,30 +26,37 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     @Override
     public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
-        System.out.println("拦截器中的token: " + token);
+//        if (token == null || token.isEmpty()) {
+//            return true;
+//        }
         if (token == null || token.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
+        // 提取声明
+        Map<String, Object> claims = jwtUtil.extractClaims(token);
 
-        Integer id = Integer.parseInt(jwtUtil.extractClaims(token).getSubject());
-        System.out.println("拦截器中的adminId: " + id);
-        if (jwtUtil.validateToken(token, id)) {
-            AdminContext.setAdminId(id); // Store id in ThreadLocal
-            System.out.println("请求中的adminId: " + AdminContext.getAdminId());
-            return true; // token有效，放行请求
-        } else {
+        // 获取admin映射并转换为Admin对象
+        Integer adminId = (Integer) claims.get("adminId");
+
+        String redisTokenKey = "token:admin:" + adminId;
+        String RedisToken = (String) redisUtil.get(redisTokenKey);
+        if (RedisToken == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
+        AdminContext.setAdminId(adminId);
+        return true;
     }
 
     @Override
     public void afterCompletion(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        System.out.println("清理存储id的线程！");
-        AdminContext.clear(); // Clear ThreadLocal to avoid memory leaks
+        AdminContext.clear();
     }
 }

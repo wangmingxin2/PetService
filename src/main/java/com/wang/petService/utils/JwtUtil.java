@@ -1,38 +1,45 @@
 package com.wang.petService.utils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.wang.petService.interceptor.JwtAuthenticationException;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
 
     private String secret = "wangMingXin"; // Use a strong secret key
+    private long expiration = 1000 * 60 *30; // 30 minutes
 
-    public String getToken(Integer id) {
+    public String getToken(Map<String, Object> claims) {
         return Jwts.builder()
-                .setSubject(id.toString())
+                .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .setExpiration(new Date(System.currentTimeMillis() + expiration ))//半小时
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
-    public Claims extractClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
-    }
+    public Map<String, Object> extractClaims(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
 
-    public boolean validateToken(String token, Integer id) {
-        return id.toString().equals(extractClaims(token).getSubject()) && !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
+            return claims;
+        } catch (ExpiredJwtException e) {
+            throw new JwtAuthenticationException("Token has expired", e);
+        } catch (SignatureException e) {
+            throw new JwtAuthenticationException("Invalid JWT signature", e);
+        } catch (MalformedJwtException e) {
+            throw new JwtAuthenticationException("Invalid JWT token", e);
+        } catch (UnsupportedJwtException e) {
+            throw new JwtAuthenticationException("Unsupported JWT token", e);
+        } catch (IllegalArgumentException e) {
+            throw new JwtAuthenticationException("JWT claims string is empty", e);
+        }
     }
 }

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -23,7 +22,6 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("serviceproviders")
-@ApiModel(value="Serviceproviders对象", description="")
 public class Serviceprovider implements Serializable {
 
     private static final long serialVersionUID = 1L;

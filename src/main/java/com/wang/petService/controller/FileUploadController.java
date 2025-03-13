@@ -1,7 +1,7 @@
 package com.wang.petService.controller;
 
 
-import com.wang.petService.service.FileUploadService;
+import com.wang.petService.utils.FileUploadService;
 import com.wang.petService.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

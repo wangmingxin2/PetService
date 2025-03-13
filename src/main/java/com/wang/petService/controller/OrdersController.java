@@ -7,7 +7,6 @@ import com.wang.petService.pojo.*;
 import com.wang.petService.service.*;
 import com.wang.petService.utils.Result;
 import com.wang.petService.vo.OrderVo;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +65,6 @@ public class OrdersController {
     }
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get all orders", notes = "Retrieve all orders transformed to OrderVo objects")
     public Result<List<OrderVo>> listAllOrders() {
         // 获取所有订单数据
         List<Order> orderList = iOrdersService.list();
@@ -83,7 +81,6 @@ public class OrdersController {
     }
 
     @GetMapping("/totalAmount")
-    @ApiOperation(value = "Get total order amount", notes = "Retrieve the sum of all order amounts")
     public Result<Integer> getTotalOrderAmount() {
         List<Order> orderList = iOrdersService.list();
         Integer sum = orderList.stream().collect(Collectors.summingInt(Order::getOrderAmount));
@@ -110,7 +107,6 @@ public class OrdersController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete order", notes = "Delete an existing order by its ID")
     public Result<String> deleteOrder(@PathVariable Long id) {
         boolean b = iOrdersService.removeById(id);
         if (b) {

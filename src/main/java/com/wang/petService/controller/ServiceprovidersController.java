@@ -2,11 +2,9 @@ package com.wang.petService.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wang.petService.pojo.Service;
 import com.wang.petService.pojo.Serviceprovider;
 import com.wang.petService.service.IServiceprovidersService;
 import com.wang.petService.utils.Result;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +46,6 @@ public class ServiceprovidersController {
     }
 
     @PostMapping
-    @ApiOperation(value = "Create a new service provider", notes = "Create a new service provider")
     public Result<String> createServiceprovider(@RequestBody Serviceprovider serviceprovider) {
         boolean save = iServiceprovidersService.save(serviceprovider);
         if (save) {
@@ -59,7 +56,6 @@ public class ServiceprovidersController {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "Update service provider", notes = "Update an existing service provider by its ID")
     public Result<String> updateServiceprovider(@RequestBody Serviceprovider serviceprovider) {
         boolean b = iServiceprovidersService.updateById(serviceprovider);
         if (b) {
@@ -70,7 +66,6 @@ public class ServiceprovidersController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete service provider", notes = "Delete an existing service provider by its ID")
     public Result<String> deleteServiceprovider(@PathVariable Long id) {
         boolean b = iServiceprovidersService.removeById(id);
         if (b) {

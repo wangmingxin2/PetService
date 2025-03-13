@@ -1,4 +1,4 @@
-package com.wang.petService.service;
+package com.wang.petService.utils;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;

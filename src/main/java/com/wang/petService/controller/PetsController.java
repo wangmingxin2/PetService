@@ -1,12 +1,10 @@
 package com.wang.petService.controller;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wang.petService.pojo.Pet;
 import com.wang.petService.service.IPetsService;
 import com.wang.petService.utils.Result;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +47,6 @@ public class PetsController {
     }
 
     @PostMapping
-    @ApiOperation(value = "Create a new pet", notes = "Create a new pet")
     public Result<String> createPet(@RequestBody Pet pet) {
         boolean save = iPetsService.save(pet);
         if (save) {
@@ -60,7 +57,6 @@ public class PetsController {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "Update pet", notes = "Update an existing pet by its ID")
     public Result<String> updatePet(@RequestBody Pet pet) {
         boolean b = iPetsService.updateById(pet);
         if (b) {
@@ -71,7 +67,6 @@ public class PetsController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete pet", notes = "Delete an existing pet by its ID")
     public Result<String> deletePet(@PathVariable Long id) {
         boolean b = iPetsService.removeById(id);
         if (b) {

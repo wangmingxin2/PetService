@@ -2,11 +2,9 @@ package com.wang.petService.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wang.petService.pojo.Pet;
 import com.wang.petService.pojo.Review;
 import com.wang.petService.service.IReviewsService;
 import com.wang.petService.utils.Result;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,14 +35,12 @@ public class ReviewsController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get review by ID", notes = "Retrieve a review by its ID")
     public Result<Review> getReviewById(@PathVariable Long id) {
         Review review = iReviewsService.getById(id);
         return Result.success(review);
     }
 
     @PostMapping
-    @ApiOperation(value = "Create a new review", notes = "Create a new review")
     public Result<String> createReview(@RequestBody Review review) {
         boolean save = iReviewsService.save(review);
         if (save) {
@@ -55,7 +51,6 @@ public class ReviewsController {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "Update review", notes = "Update an existing review by its ID")
     public Result<String> updateReview(@RequestBody Review review) {
         boolean b = iReviewsService.updateById(review);
         if (b) {
@@ -66,7 +61,6 @@ public class ReviewsController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete review", notes = "Delete an existing review by its ID")
     public Result<String> deleteReview(@PathVariable Long id) {
         boolean b = iReviewsService.removeById(id);
         if (b) {

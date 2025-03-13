@@ -2,19 +2,15 @@ package com.wang.petService.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wang.petService.pojo.Pet;
 import com.wang.petService.pojo.User;
 import com.wang.petService.service.IUsersService;
 import com.wang.petService.utils.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 /**
  * <p>
  *  前端控制器
@@ -28,14 +24,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "*") // 允许所有来源的跨域请求
-@Api(tags = "User", description = "Operations related to users")
 public class UserController {
 
     @Autowired
     private IUsersService iUsersService;
 
     @GetMapping
-    @ApiOperation(value = "Get users with pagination", notes = "Retrieve users with pagination support")
     public Result<Page<User>> getUsersWithPagination(@RequestParam(defaultValue = "1") int page,
                                                      @RequestParam(defaultValue = "10") int size,
                                                      @RequestParam(required = false) String name,
@@ -44,14 +38,12 @@ public class UserController {
         return Result.success(paginatedUsers);
     }
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get user by ID", notes = "Retrieve a user by their ID")
     public Result<User> getUserById(@PathVariable Long id) {
         User user = iUsersService.getById(id);
         return Result.success(user);
     }
 
     @PostMapping
-    @ApiOperation(value = "Create a new user", notes = "Create a new user")
     public Result<String> createUser(@RequestBody User user) {
         boolean save = iUsersService.save(user);
         if (save) {
@@ -62,7 +54,6 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "Update user", notes = "Update an existing user by their ID")
     public Result<String> updateUser(@RequestBody User user) {
         boolean b = iUsersService.updateById(user);
         if (b) {
@@ -73,7 +64,6 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete user", notes = "Delete an existing user by their ID")
     public Result<String> deleteUser(@PathVariable Long id) {
         boolean b = iUsersService.removeById(id);
         if (b) {

@@ -33,6 +33,8 @@ public class Service implements Serializable {
 
     private String description;
 
+    private String imageUrl;
+
     private BigDecimal price;
 
     private Integer duration;

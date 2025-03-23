@@ -40,6 +40,11 @@ public class PetsController {
         List<Pet> pets = iPetsService.list();
         return Result.success(pets);
     }
+    @GetMapping("/listByUserId/{userId}")
+    public Result<List<Pet>> getAllPetByUserId(@PathVariable Long userId) {
+        List<Pet> pets = iPetsService.listByUserId(userId);
+        return Result.success(pets);
+    }
     @GetMapping("/{id}")
     public Result<Pet> getPetById(@PathVariable Long id) {
         Pet pet = iPetsService.getById(id);

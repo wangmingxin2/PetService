@@ -1,9 +1,9 @@
 server:
   port: 8080   #  配置启动端口号
 minio:
-  endpoint: http://60.204.157.137:9000
-  accessKey: ruoyi
-  secretKey: ruoyi123
+  endpoint: http://47.76.26.119:19000
+  accessKey: minio
+  secretKey: yatou520..
   bucketName: pet
 mybatis:
   config-location: classpath:mybatis.cfg.xml    #  mybatis主配置文件所在路径
@@ -17,12 +17,12 @@ spring: #springboot的配置
   datasource: #定义数据源
     #127.0.0.1为本机测试的ip，3306是mysql的端口号。serverTimezone是定义时区，照抄就好，mysql高版本需要定义这些东西
     #useSSL也是某些高版本mysql需要问有没有用SSL连接
-    url: jdbc:mysql://localhost:3306/PetServiceDB?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://47.76.26.119:3306/petservicedb?useSSL=false&serverTimezone=UTC
     username: root  #数据库用户名，root为管理员
     password: root #该数据库用户的密码
   redis:
     data:
-      host: 127.0.0.1
+      host: 47.76.26.119
       port: 6379
       database: 0
       # 如果有密码，请取消下面的注释并设置密码
@@ -48,3 +48,8 @@ mybatis-plus:
     call-setters-on-nulls: true
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 微信小程序配置
+wechat:
+  miniprogram:
+    appid: wx1197aedab75505f1 # 替换为你的小程序AppID
+    secret: 2033b0fb4402820d71e25b54832ed657 # 替换为你的小程序AppSecret

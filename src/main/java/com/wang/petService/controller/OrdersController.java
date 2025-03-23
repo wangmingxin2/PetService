@@ -7,10 +7,12 @@ import com.wang.petService.pojo.*;
 import com.wang.petService.service.*;
 import com.wang.petService.utils.Result;
 import com.wang.petService.vo.OrderVo;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,6 +76,16 @@ public class OrdersController {
 
         return Result.success(voList);
     }
+//    @GetMapping("/list/{orderStatus}")
+//    public Result<List<OrderVo>> listAllOrdersByStatus(@PathVariable String orderStatus) {
+//        // 获取所有订单数据
+//        List<Order> orderList = iOrdersService.listByStatus(orderStatus);
+//
+//        // 使用提取的方法进行数据转换
+//        List<OrderVo> voList = convertToOrderVoList(orderList);
+//
+//        return Result.success(voList);
+//    }
     @GetMapping("/{id}")
     public Result<Order> getOrderById(@PathVariable Long id) {
         Order order = iOrdersService.getById(id);
@@ -90,6 +102,14 @@ public class OrdersController {
     public Result<String> createOrder(@RequestBody Order order) {
         boolean save = iOrdersService.save(order);
         if (save) {
+            Integer userId = order.getUserId();
+            User user = iUsersService.getById(userId);
+            user.setTotalSpent(user.getTotalSpent().add(new BigDecimal(order.getOrderAmount())));
+            user.setBalance(user.getBalance().subtract(new BigDecimal(order.getOrderAmount())));
+            if (user.getBalance().intValue()<0){
+                return Result.error("余额不足！");
+            }
+            iUsersService.updateById(user);
             return Result.success();
         } else {
             return Result.error();
@@ -105,7 +125,15 @@ public class OrdersController {
             return Result.error();
         }
     }
-
+    @PutMapping("/cancel/{orderId}")
+    public Result<String> cancelOrderById(@PathVariable Integer orderId) {
+        boolean result = iOrdersService.cancelOrderById(orderId);
+        if (result) {
+            return Result.success("Order canceled successfully");
+        } else {
+            return Result.error("Failed to cancel order");
+        }
+    }
     @DeleteMapping("/{id}")
     public Result<String> deleteOrder(@PathVariable Long id) {
         boolean b = iOrdersService.removeById(id);

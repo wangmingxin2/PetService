@@ -14,12 +14,14 @@ public class JwtUtil {
     private long expiration = 1000 * 60 *30; // 30 minutes
 
     public String getToken(Map<String, Object> claims) {
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration ))//半小时
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))//半小时
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+        System.out.println("token:"+token);
+        return token;
     }
 
     public Map<String, Object> extractClaims(String token) {

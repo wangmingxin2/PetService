@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -37,5 +39,24 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Order> implemen
 
         Page<Order> Page = new Page<>(page, pageSize);
         return ordersMapper.selectPage(Page, queryWrapper);
+    }
+
+    @Override
+    public List<Order> listByStatus(String orderStatus) {
+        LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
+        if (orderStatus != null && !orderStatus.isEmpty()) {
+            queryWrapper.eq(Order::getOrderStatus, orderStatus);
+        }
+        return ordersMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public boolean cancelOrderById(Integer orderId) {
+        Order order = getById(orderId);
+        if (order != null) {
+            order.setOrderStatus("4"); //status  4 (已取消)
+            return updateById(order);
+        }
+        return false;
     }
 }

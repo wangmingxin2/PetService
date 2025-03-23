@@ -70,9 +70,8 @@ public class WebSocketServer {
     public void onClose(Session session, @PathParam("userId") String userId) {
         logger.info("用户 {} 已断开WebSocket连接", userId);
         userSessions.remove(userId);
-
-        // 广播用户下线通知
-        broadcastMessage(createMessage("system", "用户 " + userId + " 下线了"), null);
+//        // 广播用户下线通知
+//        broadcastMessage(createMessage("system", "用户 " + userId + " 下线了"), null);
     }
 
     @OnError

@@ -49,13 +49,13 @@ public class User implements Serializable {
 
     private BigDecimal discountRate;
 
-    @TableField(fill = FieldFill.INSERT)
+//    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
-    @TableField(fill = FieldFill.UPDATE)
+//    @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updatedTime;
-    @TableField(fill = FieldFill.INSERT)
+//    @TableField(fill = FieldFill.INSERT)
     private String createdBy;
-    @TableField(fill = FieldFill.UPDATE)
+//    @TableField(fill = FieldFill.UPDATE)
     private String updatedBy;
 
 

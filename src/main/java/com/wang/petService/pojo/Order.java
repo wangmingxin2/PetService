@@ -34,7 +34,7 @@ public class Order   {
 
     private Integer orderAmount ;
 
-    private String orderStatus;
+    private String orderStatus;//订单状态1-待处理 2已确认- 3-已完成 4-已取消
 
     private LocalDateTime scheduledTime;
 

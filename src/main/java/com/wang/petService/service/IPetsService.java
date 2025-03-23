@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wang.petService.pojo.Pet;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IPetsService extends IService<Pet> {
 
     Page<Pet> selectLimit(Integer page, Integer pageSize, String name, String type);
+
+    List<Pet> listByUserId(Long id);
 }

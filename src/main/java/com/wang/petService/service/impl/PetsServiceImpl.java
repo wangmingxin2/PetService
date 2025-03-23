@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -38,4 +40,16 @@ public class PetsServiceImpl extends ServiceImpl<PetsMapper, Pet> implements IPe
         IPage<Pet> Page = new Page<>(page, pageSize);
         return (Page<Pet>) petsMapper.selectPage(Page, queryWrapper);
     }
+
+    @Override
+    public List<Pet> listByUserId(Long id) {
+        LambdaQueryWrapper<Pet> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (id != null) {
+            queryWrapper.eq(Pet::getUserId, id);
+        }
+        return petsMapper.selectList(queryWrapper);
+    }
+
+
 }

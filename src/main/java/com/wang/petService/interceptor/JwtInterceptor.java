@@ -1,19 +1,13 @@
 package com.wang.petService.interceptor;
 
-
-import com.wang.petService.pojo.Admin;
 import com.wang.petService.utils.AdminContext;
 import com.wang.petService.utils.JwtUtil;
 import com.wang.petService.utils.RedisUtil;
-import io.jsonwebtoken.Claims;
-import jakarta.annotation.Resource;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -41,7 +35,13 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         // 提取声明
         Map<String, Object> claims = jwtUtil.extractClaims(token);
-
+        Object openId = claims.get("openId");
+        if (openId != null) {
+            // 如果有openId，说明是小程序用户
+            Integer userId = (Integer) claims.get("userId");
+            AdminContext.setUserId(userId);
+            return true;
+        }
         // 获取admin映射并转换为Admin对象
         Integer adminId = (Integer) claims.get("adminId");
 

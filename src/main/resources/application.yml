@@ -1,9 +1,9 @@
 server:
   port: 8080   #  配置启动端口号
 minio:
-  endpoint: http://47.76.26.119:19000
-  accessKey: minio
-  secretKey: yatou520..
+  endpoint: 
+  accessKey: 
+  secretKey: 
   bucketName: pet
 mybatis:
   config-location: classpath:mybatis.cfg.xml    #  mybatis主配置文件所在路径
@@ -51,5 +51,5 @@ mybatis-plus:
   # 微信小程序配置
 wechat:
   miniprogram:
-    appid: wx1197aedab75505f1 # 替换为你的小程序AppID
-    secret: 2033b0fb4402820d71e25b54832ed657 # 替换为你的小程序AppSecret
+    appid:  # 替换为你的小程序AppID
+    secret:  # 替换为你的小程序AppSecret

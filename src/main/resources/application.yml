@@ -17,12 +17,12 @@ spring: #springboot的配置
   datasource: #定义数据源
     #127.0.0.1为本机测试的ip，3306是mysql的端口号。serverTimezone是定义时区，照抄就好，mysql高版本需要定义这些东西
     #useSSL也是某些高版本mysql需要问有没有用SSL连接
-    url: jdbc:mysql://localhost:3306/petservicedb?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://47.76.26.119:3306/petservicedb?useSSL=false&serverTimezone=UTC
     username: root  #数据库用户名，root为管理员
     password: root #该数据库用户的密码
   redis:
     data:
-      host: localhost
+      host: 47.76.26.119
       port: 6379
       database: 0
       # 如果有密码，请取消下面的注释并设置密码
@@ -53,9 +53,3 @@ wechat:
   miniprogram:
     appid: wx1197aedab75505f1 # 替换为你的小程序AppID
     secret: 2033b0fb4402820d71e25b54832ed657 # 替换为你的小程序AppSecret
-# AI 模型配置
-ai:
-  model:
-    api-key: sk-drfvsahtgpkdterdjnpcpkebilzdrxtybeygyijujepnwefu # 替换为你的API密钥
-    base-url: https://api.siliconflow.cn/v1/chat/completions # https://api.siliconflow.cn/v1/chat/completions
-    timeout: 50000 # 请求超时时间，单位为毫秒

@@ -26,13 +26,13 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
-//        if (token == null || token.isEmpty()) {
-//            return true;
-//        }
         if (token == null || token.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
+            return true;
         }
+//        if (token == null || token.isEmpty()) {
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            return false;
+//        }
         // 提取声明
         Map<String, Object> claims = jwtUtil.extractClaims(token);
         Object openId = claims.get("openId");

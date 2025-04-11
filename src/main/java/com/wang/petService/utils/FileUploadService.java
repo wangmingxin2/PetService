@@ -30,6 +30,6 @@ public class FileUploadService {
                         .contentType(file.getContentType())
                         .build()
         );
-        return "http://wxm.me/pet/"+fileName;
+        return "http://47.76.26.119:19000/pet/"+fileName;
     }
 }
